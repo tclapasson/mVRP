@@ -24,7 +24,6 @@ class GroupJson:
                     self.pathGJson.append(os.getcwd() + root.replace('.', '') + "\\" + file)
                 if file == 'Points.geojson':
                     self.pathPoint.append(os.getcwd() + root.replace('.', '') + "\\" + file)
-        print(self.pathGJson)
         args = {'LAYERS': self.pathGJson,
                 'CRS': QgsCoordinateReferenceSystem('EPSG:4326'),
                 'OUTPUT': 'TEMPORARY_OUTPUT'}
