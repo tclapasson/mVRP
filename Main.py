@@ -77,7 +77,7 @@ provider = ORStoolsProvider()
 QgsApplication.processingRegistry().addProvider(provider)
 
 
-gestionnaire = ['Robert Duplessis','Anick Laplante']
+gestionnaire = ['Anick Laplante']
 Y = "2023"
 M = "02"
 D = "20"
