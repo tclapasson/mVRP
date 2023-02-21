@@ -6,18 +6,7 @@ With QGIS : 32211
 """
 import os.path
 import sys
-sys.path.append(os.getcwd())
-sys.path.append('C:/OSGeo4W/apps/qgis-ltr/python')
-sys.path.append('C:/OSGeo4W/apps/qgis-ltr/python/plugins')
-sys.path.append('C:/Users/tclapasson/AppData/Roaming/QGIS/QGIS3/profiles/default/python/plugins/')
-from qgis.gui import QgsLayerTreeMapCanvasBridge, QgsMapCanvas
-from qgis.core import QgsProcessingFeedback, QgsApplication, QgsProcessingContext, QgsProcessingAlgorithm, \
-    QgsVectorLayer, QgsProject, QgsProcessingParameterVectorLayer, QgsProcessing, QgsProcessingParameterField, \
-    QgsProcessingParameterFeatureSource, QgsProcessingParameterEnum, QgsProcessingParameterFeatureSink, \
-    QgsProcessingMultiStepFeedback, QgsExpression, QgsCoordinateReferenceSystem, QgsField, QgsFeature, QgsVectorFileWriter, QgsCoordinateTransformContext, edit
-from PyQt5.QtCore import QVariant
 import pandas as pd
-import numpy
 import datetime
 from Date_config import DateConfig
 from VRP import mvrp
@@ -26,6 +15,19 @@ from modle import Modle
 from solutionsIteratif import Solutions
 from GroupJson import GroupJson
 from ExportDatabase import ExportSQLServer
+
+sys.path.append(os.getcwd())
+sys.path.append('C:/OSGeo4W/apps/qgis-ltr/python')
+sys.path.append('C:/OSGeo4W/apps/qgis-ltr/python/plugins')
+sys.path.append('C:/Users/tclapasson/AppData/Roaming/QGIS/QGIS3/profiles/default/python/plugins/')
+from qgis.gui import QgsLayerTreeMapCanvasBridge, QgsMapCanvas
+from qgis.core import QgsProcessingFeedback, QgsApplication, QgsProcessingContext, QgsProcessingAlgorithm, \
+    QgsVectorLayer, QgsProject, QgsProcessingParameterVectorLayer, QgsProcessing, QgsProcessingParameterField, \
+    QgsProcessingParameterFeatureSource, QgsProcessingParameterEnum, QgsProcessingParameterFeatureSink, \
+    QgsProcessingMultiStepFeedback, QgsExpression, QgsCoordinateReferenceSystem, QgsField, QgsFeature, \
+    QgsVectorFileWriter, QgsCoordinateTransformContext, edit
+from PyQt5.QtCore import QVariant
+
 
 class Main:
     def __init__(self, Y, M, D, gestionnaire, pointscibles):
@@ -37,7 +39,8 @@ class Main:
         self.date = datetime.date(int(self.Y), int(self.M), int(self.D))
 
     def exe(self):
-        pathout, csv = DateConfig(Y=self.Y, M=self.M, D=self.D, Gestionnaires=self.gestionnaire, Pointscible=self.pointscibles).datesNoNAGPStoCSV()
+        pathout, csv = DateConfig(Y=self.Y, M=self.M, D=self.D, Gestionnaires=self.gestionnaire,
+                                  Pointscible=self.pointscibles).datesNoNAGPStoCSV()
         uri = 'file:///' + csv + '?type=csv&delimiter=;&maxFields=10000&detectTypes=yes&decimalPoint=,&geomType=none&subsetIndex=no&watchFile=no'
         lyr = QgsVectorLayer(uri, 'CSV', 'delimitedtext')
         modle = Modle()
@@ -57,12 +60,10 @@ class Main:
         pointidcontrat, vehiculecount, ordre = Planification(dataframe=df, pathout=pathout).fillList()
         dyn = Planification(dataframe=df, pathout=pathout).to_xlsx()
         solutionsliste = mvrp(vehiculecount, dyn, ordre, pointidcontrat)
-        Solutions(mvrp_solutions=solutionsliste, pathout=pathout, pointscircuit=output['Points'], gestionnaire=self.gestionnaire, date=self.date).solutionglobalSHP()
+        Solutions(mvrp_solutions=solutionsliste, pathout=pathout, pointscircuit=output['Points'],
+                  gestionnaire=self.gestionnaire, date=self.date).solutionglobalSHP()
 
 
-
-import sys
-import os.path
 sys.path.append(os.getcwd())
 sys.path.append('C:/OSGeo4W/apps/qgis-ltr/python')
 sys.path.append('C:/OSGeo4W/apps/qgis-ltr/python/plugins')
@@ -70,12 +71,12 @@ sys.path.append('C:/Users/tclapasson/AppData/Roaming/QGIS/QGIS3/profiles/default
 import processing
 from processing.core.Processing import Processing
 from ORStools.proc.provider import *
+
 qgs = QgsApplication([], True)
 qgs.initQgis()
 Processing.initialize()
 provider = ORStoolsProvider()
 QgsApplication.processingRegistry().addProvider(provider)
-
 
 gestionnaire = ['Anick Laplante']
 Y = "2023"
@@ -83,12 +84,12 @@ M = "02"
 D = "20"
 cible = 3
 
-jours = ['01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31']
-#jours = ['20','21','22','23','24','25','26','27','28','29','30','31']
-#jours = ['01','02','03','04','05','06','07','08','09','10','11']
-#jours = ['01','02','03','04','05','06']
-#jours = ['01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28']
-jours = ['26','27','28','29','30','31']
+#jours = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18','19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31']
+# jours = ['20','21','22','23','24','25','26','27','28','29','30','31']
+# jours = ['01','02','03','04','05','06','07','08','09','10','11']
+# jours = ['01','02','03','04','05','06']
+# jours = ['01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28']
+jours = ['26', '27', '28', '29', '30', '31']
 
 for i in jours:
     try:
@@ -102,7 +103,6 @@ for i in jours:
             print(datetime.date(int(Y), int(M), int(i)))
     except ValueError as ve:
         print("Jour non valide")
-
 
 GroupJson().fusion()
 GroupJson().ExportToSqlServer()
