@@ -11,7 +11,7 @@ import datetime
 from Date_config import DateConfig
 from VRP import mvrp
 from Planification import Planification
-from modle import Modle
+
 from solutionsIteratif import Solutions
 from GroupJson import GroupJson
 from ExportDatabase import ExportSQLServer
@@ -27,7 +27,7 @@ from qgis.core import QgsProcessingFeedback, QgsApplication, QgsProcessingContex
     QgsProcessingMultiStepFeedback, QgsExpression, QgsCoordinateReferenceSystem, QgsField, QgsFeature, \
     QgsVectorFileWriter, QgsCoordinateTransformContext, edit
 from PyQt5.QtCore import QVariant
-
+from modle import Modle
 
 class Main:
     def __init__(self, Y, M, D, gestionnaire, pointscibles):
@@ -80,16 +80,16 @@ QgsApplication.processingRegistry().addProvider(provider)
 
 gestionnaire = ['Anick Laplante']
 Y = "2023"
-M = "02"
+M = "03"
 D = "20"
 cible = 3
 
 #jours = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18','19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31']
 # jours = ['20','21','22','23','24','25','26','27','28','29','30','31']
-# jours = ['01','02','03','04','05','06','07','08','09','10','11']
+jours = ['01','02','03','04','05','06','07','08','09','10','11']
 # jours = ['01','02','03','04','05','06']
 # jours = ['01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28']
-jours = ['26', '27', '28', '29', '30', '31']
+#jours = ['26', '27', '28', '29', '30', '31']
 
 for i in jours:
     try:
@@ -98,8 +98,8 @@ for i in jours:
         else:
             Main(Y, M, i, gestionnaire, cible).exe()
             date = datetime.date(int(Y), int(M), int(i))
-            ExportSQLServer().delete(date=date, gestionnaire=gestionnaire[0], tablename="GEOM_ITINERAIRES")
-            ExportSQLServer().delete(date=date, gestionnaire=gestionnaire[0], tablename="GEOM_POINTS")
+            ExportSQLServer().delete(date=date, gestionnaire=';'.join(gestionnaire), tablename="GEOM_ITINERAIRES")
+            ExportSQLServer().delete(date=date, gestionnaire=';'.join(gestionnaire), tablename="GEOM_POINTS")
             print(datetime.date(int(Y), int(M), int(i)))
     except ValueError as ve:
         print("Jour non valide")
